@@ -2,7 +2,11 @@
 module.exports = {
 	content: ["./index.html", "./src/**/*.{svelte,js,ts}"],
 	theme: {
-		extend: {},
+		extend: {
+			fontFamily: {
+				"roboto-slab": ["roboto-slab", "sans-serif"],
+			},
+		},
 	},
 	plugins: [],
 };
