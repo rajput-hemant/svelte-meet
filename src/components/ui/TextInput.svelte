@@ -5,7 +5,7 @@
 		value = null,
 		rows = null;
 	const inputClass =
-		"block w-full p-2 transition-all ease-out duration-500 border-b-2 border-gray-400 rounded focus:outline-none focus:border-red-500";
+		"block w-full p-2 transition-all ease-out duration-500 border-2 border-gray-400 rounded focus:outline-none focus:border-red-500";
 </script>
 
 <div class="px-0 py-2 mx-0 my-1 w-full">

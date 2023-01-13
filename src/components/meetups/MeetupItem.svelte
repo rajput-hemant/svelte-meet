@@ -21,19 +21,13 @@
 		<h1 class=" flex text-2xl mx-0 m-2 font-roboto-slab font-bold">
 			{title}
 			{#if isFavourite}
-				<Badge>Favourite</Badge>
+				<Badge>🤍 Favourite</Badge>
 			{/if}
 		</h1>
 		<h2 class="text-lg text-slate-500 mx-0 my-2">{subtitle}</h2>
 		<p class="text-slate-600">{address}</p>
 	</header>
 
-	<!-- h1.is-favorite {
-    background: #01a129;
-    color: white;
-    padding: 0 0.5rem;
-    border-radius: 5px;
-  } -->
 	<!-- image -->
 	<div class="w-full h-56 p-2">
 		<img
@@ -45,16 +39,18 @@
 
 	<!-- content -->
 	<div class="p-4">
-		<p class="text-xl m-0 text-right">{description}</p>
+		<p class="text-xl m-0 text-right truncate">{description}</p>
 	</div>
-	<footer class="p-4">
-		<Button>Show Details</Button>
-		<Button
-			isFav={isFavourite}
-			on:click={() => dispatch("toggleFavourite", id)}
-		>
-			{isFavourite ? "Unfavourite" : "Favourite"}
-		</Button>
-		<Button href="mailto:{email}" className="p-2.5">Contact</Button>
+	<footer class="pb-4">
+		<div class="flex justify-around">
+			<Button>🕵🏻‍♀️ Show Details</Button>
+			<Button
+				isFav={isFavourite}
+				on:click={() => dispatch("toggleFavourite", id)}
+			>
+				{isFavourite ? "❌  Unfavourite" : "❤️ Favourite"}
+			</Button>
+			<Button href="mailto:{email}" className="p-2.5">☎ Contact</Button>
+		</div>
 	</footer>
 </article>

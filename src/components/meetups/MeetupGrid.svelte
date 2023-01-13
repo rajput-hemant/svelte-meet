@@ -16,7 +16,7 @@
 </script>
 
 <!-- meetups -->
-<section class="w-full gap-4 grid grid-cols-1 md:grid-cols-2">
+<section class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:mx-20 2xl:grid-cols-3">
 	{#each meetups as meetup}
 		<MeetupItem
 			id={meetup.id}

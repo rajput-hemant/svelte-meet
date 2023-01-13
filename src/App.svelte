@@ -56,6 +56,10 @@
 		meetup.isFavourite = !meetup.isFavourite;
 		meetups[meetupIdx] = meetup;
 	}
+
+	function cancelEdit() {
+		showEditMeetup = false;
+	}
 </script>
 
 <Header />
@@ -63,11 +67,11 @@
 <main class="mt-20">
 	<div class="flex justify-center">
 		<Button on:click={() => (showEditMeetup = !showEditMeetup)}
-			>Add New Meetup</Button
+			>➕ Add New Meetup</Button
 		>
 	</div>
 	{#if showEditMeetup}
-		<EditMeetup on:save={addMeetup} />
+		<EditMeetup on:save={addMeetup} on:cancel={cancelEdit} />
 	{/if}
 	<MeetupGrid {meetups} on:toggleFavourite={onToggleFavourite} />
 </main>
