@@ -1,16 +1,19 @@
 <script lang="ts">
 	export let href = "",
-		caption = "",
 		className = "",
+		isFav = false,
 		type: "button" | "submit" | "reset" = "button";
 
-	const classes =
+	$: classes =
 		className +
-		" !bg-pink-500 p-2 rounded shadow-md text-white font-bold hover:!bg-pink-600 focus:outline-none";
+		(isFav
+			? " border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+			: " border-pink-600 text-pink-600 hover:bg-pink-600 hover:text-white") +
+		" border-2 p-2 rounded shadow-md font-bold focus:outline-none";
 </script>
 
 {#if href}
-	<a {href} class={classes}>{caption}</a>
+	<a {href} class={classes}><slot /></a>
 {:else}
-	<button {type} class={classes}>{caption}</button>
+	<button {type} class={classes} on:click><slot /></button>
 {/if}

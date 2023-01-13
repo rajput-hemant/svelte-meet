@@ -1,17 +1,29 @@
 <script lang="ts">
+	import { createEventDispatcher } from "svelte";
+	import Badge from "../ui/Badge.svelte";
+
 	import Button from "../ui/Button.svelte";
 
-	export let title: string,
+	export let id: string,
+		title: string,
 		subtitle: string,
 		imageUrl: string,
 		description: string,
 		address: string,
-		email: string;
+		email: string,
+		isFavourite: boolean;
+
+	const dispatch = createEventDispatcher();
 </script>
 
 <article class="shadow-md rounded-md bg-white m-4">
 	<header class="p-4">
-		<h1 class="text-2xl mx-0 m-2 font-roboto-slab font-bold">{title}</h1>
+		<h1 class=" flex text-2xl mx-0 m-2 font-roboto-slab font-bold">
+			{title}
+			{#if isFavourite}
+				<Badge>Favourite</Badge>
+			{/if}
+		</h1>
 		<h2 class="text-lg text-slate-500 mx-0 my-2">{subtitle}</h2>
 		<p class="text-slate-600">{address}</p>
 	</header>
@@ -36,8 +48,13 @@
 		<p class="text-xl m-0 text-right">{description}</p>
 	</div>
 	<footer class="p-4">
-		<Button caption="Show Details" />
-		<Button caption="Favourite" />
-		<Button href="mailto:{email}" caption="Contact" className="p-2.5" />
+		<Button>Show Details</Button>
+		<Button
+			isFav={isFavourite}
+			on:click={() => dispatch("toggleFavourite", id)}
+		>
+			{isFavourite ? "Unfavourite" : "Favourite"}
+		</Button>
+		<Button href="mailto:{email}" className="p-2.5">Contact</Button>
 	</footer>
 </article>
