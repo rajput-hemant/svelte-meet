@@ -1,9 +1,11 @@
 <script lang="ts">
 	import "./styles/global.css";
 	import Header from "./components/ui/Header.svelte";
-	import MeetupItem from "./components/meetups/MeetupItem.svelte";
+	import TextInput from "./components/ui/TextInput.svelte";
+	import MeetupGrid from "./components/meetups/MeetupGrid.svelte";
+	import Button from "./components/ui/Button.svelte";
 
-	const meetups = [
+	let meetups = [
 		{
 			id: "m1",
 			title: "Coding Bootcamp",
@@ -26,19 +28,49 @@
 			contactEmail: "swim@test.com",
 		},
 	];
+
+	let title = "",
+		subtitle = "",
+		address = "",
+		imageUrl = "",
+		email = "",
+		description = "";
+
+	function addMeetup() {
+		const meetup = {
+			id: Math.random().toString(),
+			title,
+			subtitle,
+			address,
+			imageUrl,
+			description,
+			contactEmail: email,
+		};
+
+		meetups = [...meetups, meetup];
+	}
 </script>
 
 <Header />
 
-<section class="mt-20">
-	{#each meetups as meetup}
-		<MeetupItem
-			title={meetup.title}
-			subtitle={meetup.subtitle}
-			description={meetup.description}
-			imageUrl={meetup.imageUrl}
-			address={meetup.address}
-			email={meetup.contactEmail}
+<main class="mt-20">
+	<form
+		on:submit|preventDefault={addMeetup}
+		class="flex flex-col w-[30rem] m-auto items-center "
+	>
+		<TextInput id="title" bind:value={title} label="Title" />
+		<TextInput id="subtitle" bind:value={subtitle} label="Subtitle" />
+		<TextInput id="address" bind:value={address} label="Address" />
+		<TextInput id="image" bind:value={imageUrl} label="Image" />
+		<TextInput id="email" type="email" bind:value={email} label="Email" />
+		<TextInput
+			id="description"
+			rows="3"
+			type="textarea"
+			label="Description"
+			bind:value={description}
 		/>
-	{/each}
-</section>
+		<Button type="submit" caption="Save" className="w-20" />
+	</form>
+	<MeetupGrid {meetups} />
+</main>

@@ -1,7 +1,12 @@
-<script>
+<script lang="ts">
 	import Button from "../ui/Button.svelte";
 
-	export let title, subtitle, imageUrl, description, address, email;
+	export let title: string,
+		subtitle: string,
+		imageUrl: string,
+		description: string,
+		address: string,
+		email: string;
 </script>
 
 <article class="shadow-md rounded-md bg-white m-4">
@@ -31,8 +36,8 @@
 		<p class="text-xl m-0 text-right">{description}</p>
 	</div>
 	<footer class="p-4">
-		<a href="mailto:{email}">Contact</a>
-		<Button>Show Details</Button>
-		<Button>Favourite</Button>
+		<Button caption="Show Details" />
+		<Button caption="Favourite" />
+		<Button href="mailto:{email}" caption="Contact" className="p-2.5" />
 	</footer>
 </article>
