@@ -16,7 +16,7 @@
 	class="fixed top-0 left-0 w-full h-screen bg-black opacity-75 z-10"
 />
 <div
-	class="fixed w-3/4 top-16 left-[12.5%] max-h-[90vh] bg-white border-5 z-50 shadow-md rounded-lg lg:w-1/2 lg:left-[25%]"
+	class="fixed w-full top-0 bg-white border-5 z-50 shadow-md rounded-lg sm:w-3/4 sm:top-16 sm:left-[12.5%] sm:max-w-[90vh] lg:w-1/2 lg:left-[25%]"
 >
 	<h1
 		class="p-4 m-0 border-b border-slate-300 font-roboto-slab text-center font-bold text-3xl"

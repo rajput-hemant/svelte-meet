@@ -47,11 +47,18 @@
 	</div>
 	<footer class="pb-4">
 		<div class="flex justify-around">
-			<Button on:click={() => dispatch("showDetails", { id })}
-				>🕵🏻‍♀️ Show Details</Button
+			<Button
+				on:click={() => dispatch("showDetails", { id })}
+				className="px-1 md:px-4">🕵🏻‍♀️ Show Details</Button
 			>
-			<Button on:click={() => dispatch("edit", { id })}>✏ Edit Meetup</Button>
-			<Button isFav={isFavourite} on:click={toggleFavourite}>
+			<Button on:click={() => dispatch("edit", { id })} className="px-1 md:px-4"
+				>✏ Edit Meetup</Button
+			>
+			<Button
+				isFav={isFavourite}
+				on:click={toggleFavourite}
+				className="px-1 md:px-4"
+			>
 				{isFavourite ? "❌  Unfavourite" : "❤️ Favourite"}
 			</Button>
 			<!-- <Button href="mailto:{email}">☎ Contact</Button> -->
