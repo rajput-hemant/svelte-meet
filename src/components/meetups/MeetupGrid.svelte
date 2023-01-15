@@ -1,18 +1,8 @@
 <script lang="ts">
+	import type { Meetup } from "../../types";
 	import MeetupItem from "./MeetupItem.svelte";
 
-	type Meetup = {
-		id: string;
-		title: string;
-		subtitle: string;
-		description: string;
-		imageUrl: string;
-		address: string;
-		contactEmail: string;
-		isFavourite: boolean;
-	}[];
-
-	export let meetups: Meetup = [];
+	export let meetups: Meetup[] = [];
 </script>
 
 <!-- meetups -->
@@ -27,6 +17,7 @@
 			address={meetup.address}
 			email={meetup.contactEmail}
 			isFavourite={meetup.isFavourite}
+			on:showDetails
 		/>
 	{/each}
 </section>

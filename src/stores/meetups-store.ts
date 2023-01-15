@@ -1,7 +1,8 @@
-import { writable } from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 import { v4 as uuid } from "uuid";
+import type { Meetup } from "../types";
 
-const meetups = writable([
+const meetups: Writable<Meetup[]> = writable([
 	{
 		id: "m1",
 		title: "Coding Bootcamp",
@@ -30,7 +31,7 @@ const meetups = writable([
 const meetupsStore = {
 	subscribe: meetups.subscribe,
 
-	addMeetup: (meetupData: any) => {
+	addMeetup: (meetupData: Meetup) => {
 		const newMeetup = {
 			...meetupData,
 			id: uuid(),

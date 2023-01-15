@@ -36,11 +36,11 @@
 		};
 
 		meetups.addMeetup(meetupData);
-		dispatch("cancel");
+		dispatch("close");
 	}
 </script>
 
-<Modal title="Add Meetup" on:cancel>
+<Modal title="Add Meetup" on:close>
 	<form on:submit|preventDefault={submitForm} class="flex flex-col">
 		<TextInput
 			id="title"

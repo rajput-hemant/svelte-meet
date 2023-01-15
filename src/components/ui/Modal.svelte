@@ -7,7 +7,7 @@
 	const dispatch = createEventDispatcher();
 
 	function closeModal() {
-		dispatch("cancel");
+		dispatch("close");
 	}
 </script>
 
