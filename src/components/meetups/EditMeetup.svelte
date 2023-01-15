@@ -7,7 +7,7 @@
 	import Modal from "../ui/Modal.svelte";
 	import TextInput from "../ui/TextInput.svelte";
 
-	const dispatch = createEventDispatcher();
+	export let id: string;
 
 	let title = "",
 		subtitle = "",
@@ -15,6 +15,24 @@
 		imageUrl = "",
 		email = "",
 		description = "";
+
+	if (id) {
+		const unsubscribe = meetups.subscribe((meetups) => {
+			const selectedMeetup = meetups.find((meetup) => meetup.id === id);
+			if (selectedMeetup) {
+				title = selectedMeetup.title;
+				subtitle = selectedMeetup.subtitle;
+				address = selectedMeetup.address;
+				imageUrl = selectedMeetup.imageUrl;
+				email = selectedMeetup.email;
+				description = selectedMeetup.description;
+			}
+		});
+
+		unsubscribe();
+	}
+
+	const dispatch = createEventDispatcher();
 
 	$: disabled =
 		isEmpty(title) ||
@@ -30,12 +48,26 @@
 			subtitle,
 			address,
 			imageUrl,
-			email,
 			description,
+			email,
 			isFavourite: false,
 		};
 
-		meetups.addMeetup(meetupData);
+		if (id) {
+			meetups.updateMeetup(id, meetupData);
+		} else {
+			meetups.addMeetup(meetupData);
+		}
+
+		dispatch("close");
+	}
+
+	function deleteMeetup() {
+		meetups.deleteMeetup(id);
+		dispatch("close");
+	}
+
+	function closeModal() {
 		dispatch("close");
 	}
 </script>
@@ -88,7 +120,11 @@
 			validityMessage="Please enter a valid Description."
 		/>
 	</form>
-	<div slot="footer">
+	<footer slot="footer" class="pb-4 flex justify-center gap-4">
 		<Button on:click={submitForm} {disabled}>💾 Save</Button>
-	</div>
+		{#if id}
+			<Button on:click={deleteMeetup}>🗑 Delete</Button>
+		{/if}
+		<Button on:click={closeModal}>❌ Close</Button>
+	</footer>
 </Modal>

@@ -19,15 +19,23 @@
 	});
 </script>
 
-<section>
-	<div>
-		<img src={selectedMeetup.imageUrl} alt={selectedMeetup.title} />
+<section class="m-24 md:mx-60">
+	<div class="h-96">
+		<img
+			src={selectedMeetup.imageUrl}
+			alt={selectedMeetup.title}
+			class="w-full h-full object-cover rounded-xl"
+		/>
 	</div>
-	<div>
-		<h1>{selectedMeetup.title}</h1>
-		<h2>{selectedMeetup.subtitle}- {selectedMeetup.address}</h2>
-		<p>{selectedMeetup.description}</p>
-		<Button href="mailto:{selectedMeetup.contactEmail}">☎ Contact</Button>
+	<div class="text-center">
+		<h1 class="text-4xl font-roboto-slab font-bold py-3">
+			{selectedMeetup.title}
+		</h1>
+		<h2 class="text-xl text-stone-500 italic">
+			{selectedMeetup.subtitle}- {selectedMeetup.address}
+		</h2>
+		<p class="text-xl py-5">{selectedMeetup.description}</p>
+		<Button href="mailto:{selectedMeetup.email}">☎ Contact</Button>
 		<Button on:click={() => dispatch("close")}>❌ Close</Button>
 	</div>
 </section>

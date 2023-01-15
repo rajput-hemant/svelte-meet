@@ -50,10 +50,11 @@
 			<Button on:click={() => dispatch("showDetails", { id })}
 				>🕵🏻‍♀️ Show Details</Button
 			>
+			<Button on:click={() => dispatch("edit", { id })}>✏ Edit Meetup</Button>
 			<Button isFav={isFavourite} on:click={toggleFavourite}>
 				{isFavourite ? "❌  Unfavourite" : "❤️ Favourite"}
 			</Button>
-			<Button href="mailto:{email}">☎ Contact</Button>
+			<!-- <Button href="mailto:{email}">☎ Contact</Button> -->
 		</div>
 	</footer>
 </article>

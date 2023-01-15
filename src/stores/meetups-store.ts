@@ -12,7 +12,7 @@ const meetups: Writable<Meetup[]> = writable([
 		imageUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Caffe_Nero_coffee_bar%2C_High_St%2C_Sutton%2C_Surrey%2C_Greater_London.JPG/800px-Caffe_Nero_coffee_bar%2C_High_St%2C_Sutton%2C_Surrey%2C_Greater_London.JPG",
 		address: "27th Nerd Road, 32523 New York",
-		contactEmail: "code@test.com",
+		email: "code@test.com",
 		isFavourite: false,
 	},
 	{
@@ -23,7 +23,7 @@ const meetups: Writable<Meetup[]> = writable([
 		imageUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Olympic_swimming_pool_%28Tbilisi%29.jpg/800px-Olympic_swimming_pool_%28Tbilisi%29.jpg",
 		address: "27th Nerd Road, 32523 New York",
-		contactEmail: "swim@test.com",
+		email: "swim@test.com",
 		isFavourite: false,
 	},
 ]);
@@ -39,6 +39,24 @@ const meetupsStore = {
 		};
 		meetups.update((items) => {
 			return [newMeetup, ...items];
+		});
+	},
+
+	updateMeetup: (id: string, meetupData: Meetup) => {
+		meetups.update((items) => {
+			const meetupIdx = items.findIndex((meetup) => meetup.id === id);
+			const updatedMeetup = { ...items[meetupIdx], ...meetupData };
+			const updatedMeetups = [...items];
+			updatedMeetups[meetupIdx] = updatedMeetup;
+			console.log(updatedMeetups);
+
+			return updatedMeetups;
+		});
+	},
+
+	deleteMeetup: (id: string) => {
+		meetups.update((items) => {
+			return items.filter((meetup) => meetup.id !== id);
 		});
 	},
 

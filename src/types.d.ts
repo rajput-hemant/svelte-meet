@@ -5,6 +5,6 @@ export type Meetup = {
 	description?: string;
 	imageUrl?: string;
 	address?: string;
-	contactEmail?: string;
+	email?: string;
 	isFavourite?: boolean;
 };

@@ -12,17 +12,27 @@
 		"details",
 	}
 
-	let showEditMeetup = false,
+	let editMode = null,
 		page: pages = pages.home,
-		pageParams = { id: "" };
+		params = { pageId: "", editId: "" };
 
 	function closeModal() {
-		showEditMeetup = false;
+		editMode = null;
+		params.editId = "";
 	}
 
 	function showDetails(e: CustomEvent) {
 		page = pages.details;
-		pageParams.id = e.detail.id;
+		params.pageId = e.detail.id;
+	}
+
+	function addMeetup() {
+		editMode = "edit";
+	}
+
+	function editMeetup(e: CustomEvent) {
+		editMode = "edit";
+		params.editId = e.detail.id;
 	}
 </script>
 
@@ -31,20 +41,22 @@
 <main class="mt-20">
 	{#if page === pages.home}
 		<div class="flex justify-center">
-			<Button on:click={() => (showEditMeetup = !showEditMeetup)}
-				>➕ Add New Meetup</Button
-			>
+			<Button on:click={addMeetup}>➕ Add New Meetup</Button>
 		</div>
-		{#if showEditMeetup}
-			<EditMeetup on:close={closeModal} />
+		{#if editMode === "edit"}
+			<EditMeetup id={params.editId} on:close={closeModal} />
 		{/if}
-		<MeetupGrid meetups={$meetups} on:showDetails={showDetails} />
+		<MeetupGrid
+			meetups={$meetups}
+			on:showDetails={showDetails}
+			on:edit={editMeetup}
+		/>
 	{:else}
 		<MeetupDetails
-			id={pageParams.id}
+			id={params.pageId}
 			on:close={() => {
 				page = pages.home;
-				pageParams.id = "";
+				params.pageId = "";
 			}}
 		/>
 	{/if}

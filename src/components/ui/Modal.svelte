@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
-	import Button from "./Button.svelte";
 
 	export let title: string;
 
@@ -25,8 +24,5 @@
 		{title}
 	</h1>
 	<div class="p-4"><slot /></div>
-	<footer class="pb-4 flex gap-4 justify-center">
-		<slot name="footer" />
-		<Button on:click={closeModal}>❌ Close</Button>
-	</footer>
+	<slot name="footer" />
 </div>
