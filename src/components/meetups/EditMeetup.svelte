@@ -16,6 +16,8 @@
 		email = "",
 		description = "";
 
+	const firebase = `${import.meta.env.VITE_FIREBASE}/meetups.json`;
+
 	if (id) {
 		const unsubscribe = meetups.subscribe((meetups) => {
 			const selectedMeetup = meetups.find((meetup) => meetup.id === id);
@@ -42,7 +44,7 @@
 		isEmpty(description) ||
 		!isValidEmail(email);
 
-	function submitForm() {
+	async function submitForm() {
 		const meetupData = {
 			title,
 			subtitle,
@@ -54,15 +56,50 @@
 		};
 
 		if (id) {
+			const response = await fetch(firebase, {
+				method: "PATCH",
+				body: JSON.stringify({ [id]: meetupData }),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			if (!response.ok) {
+				throw new Error("Something went wrong!");
+			}
 			meetups.updateMeetup(id, meetupData);
 		} else {
-			meetups.addMeetup(meetupData);
+			try {
+				const resposne = await fetch(firebase, {
+					method: "POST",
+					body: JSON.stringify(meetupData),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				if (!resposne.ok) {
+					throw new Error("Something went wrong!");
+				}
+				const data = await resposne.json();
+				meetups.addMeetup({ ...meetupData, id: data.name, isFavourite: false });
+			} catch (error) {
+				console.log(error);
+			}
 		}
 
 		dispatch("close");
 	}
 
-	function deleteMeetup() {
+	async function deleteMeetup() {
+		const response = await fetch(firebase, {
+			method: "PATCH",
+			body: JSON.stringify({ [id]: null }),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (!response.ok) {
+			throw new Error("Something went wrong!");
+		}
 		meetups.deleteMeetup(id);
 		dispatch("close");
 	}

@@ -15,7 +15,20 @@
 
 	const dispatch = createEventDispatcher();
 
-	function toggleFavourite() {
+	async function toggleFavourite() {
+		const response = await fetch(
+			`${import.meta.env.VITE_FIREBASE}/meetups/${id}.json`,
+			{
+				method: "PATCH",
+				body: JSON.stringify({ isFavourite: !isFavourite }),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
+		if (!response.ok) {
+			throw new Error("Something went wrong!");
+		}
 		meetups.toggleFavourite(id);
 	}
 </script>

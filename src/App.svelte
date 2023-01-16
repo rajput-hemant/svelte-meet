@@ -5,6 +5,7 @@
 	import MeetupGrid from "./components/meetups/MeetupGrid.svelte";
 	import EditMeetup from "./components/meetups/EditMeetup.svelte";
 	import MeetupDetails from "./components/meetups/MeetupDetails.svelte";
+	import LoadingSpinner from "./components/ui/LoadingSpinner.svelte";
 
 	enum pages {
 		"home",
@@ -13,7 +14,34 @@
 
 	let editMode = null,
 		page: pages = pages.home,
-		params = { pageId: "", editId: "" };
+		params = { pageId: "", editId: "" },
+		isLoading = false;
+
+	async function fetchMeetups() {
+		try {
+			isLoading = true;
+			const response = await fetch(
+				`${import.meta.env.VITE_FIREBASE}/meetups.json`
+			);
+			if (!response.ok) {
+				throw new Error("Something went wrong");
+			}
+			const data = await response.json();
+			const loadedMeetups = [];
+			for (const key in data) {
+				loadedMeetups.push({
+					id: key,
+					...data[key],
+				});
+			}
+			isLoading = false;
+			meetups.setMeetups(loadedMeetups.reverse());
+		} catch (error) {
+			isLoading = false;
+			console.log(error);
+		}
+	}
+	fetchMeetups();
 
 	function closeModal() {
 		editMode = null;
@@ -42,12 +70,16 @@
 		{#if editMode === "edit"}
 			<EditMeetup id={params.editId} on:close={closeModal} />
 		{/if}
-		<MeetupGrid
-			meetups={$meetups}
-			on:add={addMeetup}
-			on:edit={editMeetup}
-			on:showDetails={showDetails}
-		/>
+		{#if isLoading}
+			<LoadingSpinner />
+		{:else}
+			<MeetupGrid
+				meetups={$meetups}
+				on:add={addMeetup}
+				on:edit={editMeetup}
+				on:showDetails={showDetails}
+			/>
+		{/if}
 	{:else}
 		<MeetupDetails
 			id={params.pageId}
