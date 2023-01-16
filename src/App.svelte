@@ -6,6 +6,7 @@
 	import EditMeetup from "./components/meetups/EditMeetup.svelte";
 	import MeetupDetails from "./components/meetups/MeetupDetails.svelte";
 	import LoadingSpinner from "./components/ui/LoadingSpinner.svelte";
+	import http from "./utils/http";
 
 	enum pages {
 		"home",
@@ -18,28 +19,17 @@
 		isLoading = false;
 
 	async function fetchMeetups() {
-		try {
-			isLoading = true;
-			const response = await fetch(
-				`${import.meta.env.VITE_FIREBASE}/meetups.json`
-			);
-			if (!response.ok) {
-				throw new Error("Something went wrong");
-			}
-			const data = await response.json();
-			const loadedMeetups = [];
-			for (const key in data) {
-				loadedMeetups.push({
-					id: key,
-					...data[key],
-				});
-			}
-			isLoading = false;
-			meetups.setMeetups(loadedMeetups.reverse());
-		} catch (error) {
-			isLoading = false;
-			console.log(error);
+		isLoading = true;
+		const data = await http.get();
+		const loadedMeetups = [];
+		for (const key in data) {
+			loadedMeetups.push({
+				id: key,
+				...data[key],
+			});
 		}
+		isLoading = false;
+		meetups.setMeetups(loadedMeetups.reverse());
 	}
 	fetchMeetups();
 

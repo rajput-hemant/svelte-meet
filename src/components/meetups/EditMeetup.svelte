@@ -6,6 +6,7 @@
 	import Button from "../ui/Button.svelte";
 	import Modal from "../ui/Modal.svelte";
 	import TextInput from "../ui/TextInput.svelte";
+	import http from "../../utils/http";
 
 	export let id: string;
 
@@ -14,9 +15,9 @@
 		address = "",
 		imageUrl = "",
 		email = "",
-		description = "";
-
-	const firebase = `${import.meta.env.VITE_FIREBASE}/meetups.json`;
+		description = "",
+		isSaving = false,
+		isDeleting = false;
 
 	if (id) {
 		const unsubscribe = meetups.subscribe((meetups) => {
@@ -56,50 +57,23 @@
 		};
 
 		if (id) {
-			const response = await fetch(firebase, {
-				method: "PATCH",
-				body: JSON.stringify({ [id]: meetupData }),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-			if (!response.ok) {
-				throw new Error("Something went wrong!");
-			}
+			isSaving = true;
+			await http.patch(id, meetupData);
+			isSaving = false;
 			meetups.updateMeetup(id, meetupData);
 		} else {
-			try {
-				const resposne = await fetch(firebase, {
-					method: "POST",
-					body: JSON.stringify(meetupData),
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
-				if (!resposne.ok) {
-					throw new Error("Something went wrong!");
-				}
-				const data = await resposne.json();
-				meetups.addMeetup({ ...meetupData, id: data.name, isFavourite: false });
-			} catch (error) {
-				console.log(error);
-			}
+			isSaving = true;
+			await http.post(meetupData);
+			isSaving = false;
 		}
 
 		dispatch("close");
 	}
 
 	async function deleteMeetup() {
-		const response = await fetch(firebase, {
-			method: "PATCH",
-			body: JSON.stringify({ [id]: null }),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		if (!response.ok) {
-			throw new Error("Something went wrong!");
-		}
+		isDeleting = true;
+		await http.delete(id);
+		isDeleting = false;
 		meetups.deleteMeetup(id);
 		dispatch("close");
 	}
@@ -135,7 +109,7 @@
 		<TextInput
 			id="image"
 			bind:value={imageUrl}
-			label="Image"
+			label="Image (URL)"
 			valid={!isEmpty(imageUrl)}
 			validityMessage="Please enter a valid Image Url."
 		/>
@@ -158,9 +132,13 @@
 		/>
 	</form>
 	<footer slot="footer" class="pb-4 flex justify-center gap-4">
-		<Button on:click={submitForm} {disabled}>💾 Save</Button>
+		<Button on:click={submitForm} {disabled}
+			>{isSaving ? "Saving.." : "💾 Save"}</Button
+		>
 		{#if id}
-			<Button on:click={deleteMeetup}>🗑 Delete</Button>
+			<Button on:click={deleteMeetup}
+				>{isDeleting ? "Deleting..." : "🗑 Delete"}</Button
+			>
 		{/if}
 		<Button on:click={closeModal}>❌ Close</Button>
 	</footer>

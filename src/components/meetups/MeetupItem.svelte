@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import meetups from "../../stores/meetups-store";
+	import http from "../../utils/http";
 	import Badge from "../ui/Badge.svelte";
 	import Button from "../ui/Button.svelte";
 
@@ -11,24 +12,15 @@
 		description: string,
 		address: string,
 		email: string,
-		isFavourite: boolean;
+		isFavourite: boolean,
+		isLoading = false;
 
 	const dispatch = createEventDispatcher();
 
 	async function toggleFavourite() {
-		const response = await fetch(
-			`${import.meta.env.VITE_FIREBASE}/meetups/${id}.json`,
-			{
-				method: "PATCH",
-				body: JSON.stringify({ isFavourite: !isFavourite }),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
-		);
-		if (!response.ok) {
-			throw new Error("Something went wrong!");
-		}
+		isLoading = true;
+		await http.patch(id, { isFavourite: !isFavourite });
+		isLoading = false;
 		meetups.toggleFavourite(id);
 	}
 </script>
@@ -72,7 +64,11 @@
 				on:click={toggleFavourite}
 				className="px-1 md:px-4"
 			>
-				{isFavourite ? "❌  Unfavourite" : "❤️ Favourite"}
+				{#if isLoading}
+					Processing...
+				{:else}
+					{isFavourite ? "❌  Unfavourite" : "❤️ Favourite"}
+				{/if}
 			</Button>
 			<!-- <Button href="mailto:{email}">☎ Contact</Button> -->
 		</div>
