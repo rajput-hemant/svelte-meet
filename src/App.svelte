@@ -20,7 +20,7 @@
 
 	async function fetchMeetups() {
 		isLoading = true;
-		const data = await http.get();
+		const { data } = await http.get();
 		const loadedMeetups = [];
 		for (const key in data) {
 			loadedMeetups.push({

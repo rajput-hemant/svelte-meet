@@ -63,7 +63,8 @@
 			meetups.updateMeetup(id, meetupData);
 		} else {
 			isSaving = true;
-			await http.post(meetupData);
+			const { data } = await http.post(meetupData);
+			meetups.addMeetup({ ...meetupData, id: data.name, isFavourite: false });
 			isSaving = false;
 		}
 

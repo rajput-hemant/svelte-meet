@@ -1,5 +1,4 @@
 import type { Meetup } from "../types";
-import meetupsStore from "../stores/meetups-store";
 
 class Http {
 	firebase = import.meta.env.VITE_FIREBASE;
@@ -10,8 +9,8 @@ class Http {
 			if (!response.ok) {
 				throw new Error("Something went wrong");
 			}
-			const data = await response.json();
-			return data;
+			const data: Meetup = await response.json();
+			return { data, response };
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -30,14 +29,13 @@ class Http {
 				throw new Error("Something went wrong!");
 			}
 			const data = await response.json();
-			meetupsStore.addMeetup({ ...payload, id: data.name, isFavourite: false });
-			return response;
+			return { data, response };
 		} catch (error) {
 			throw new Error(error);
 		}
 	}
 
-	private async patch_(id: string, payload?: Meetup) {
+	async patch(id: string, payload?: Meetup) {
 		try {
 			const response = await fetch(`${this.firebase}/meetups/${id}.json`, {
 				method: "PATCH",
@@ -55,12 +53,18 @@ class Http {
 		}
 	}
 
-	async patch(id: string, payload?: Meetup) {
-		return this.patch_(id, payload);
-	}
-
 	async delete(id: string) {
-		return this.patch_(id, null);
+		try {
+			const response = await fetch(`${this.firebase}/meetups/${id}.json`, {
+				method: "DELETE",
+			});
+			if (!response.ok) {
+				throw new Error("Something went wrong!");
+			}
+			return response;
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
 }
 
